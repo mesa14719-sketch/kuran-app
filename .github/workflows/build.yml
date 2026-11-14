@@ -29,7 +29,7 @@ jobs:
         uses: darkshredder/web-to-app-action@main
         with:
           web-url: 'https://localhost'
-          app-name: 'kuran-app'
+          app-name: 'MyApp'
           package-name: 'com.example.myapp'
           folder: 'build'
 
