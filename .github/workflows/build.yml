@@ -1,0 +1,40 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Prepare build folder
+        run: |
+          mkdir -p build
+          cp index.html build/ || true
+          cp style.css build/ || true
+          cp script.js build/ || true
+
+      - name: Build APK
+        uses: darkshredder/web-to-app-action@main
+        with:
+          web-url: 'https://localhost'
+          app-name: 'kuran-app'
+          package-name: 'com.example.myapp'
+          folder: 'build'
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-apk
+          path: '*.apk'
