@@ -31,6 +31,15 @@ jobs:
           cp style.css www/ || true
           cp script.js www/ || true
 
+      - name: Prepare icon from images.jpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y imagemagick
+          mkdir -p assets
+          convert images.jpeg -resize 1024x1024^ -background '#0f0c29' -gravity center -extent 1024x1024 assets/icon.png
+          echo "✅ icon.png ready:"
+          file assets/icon.png
+
       - name: Install Capacitor
         run: |
           npm init -y
@@ -38,9 +47,16 @@ jobs:
 
       - name: Init Capacitor
         run: |
-          npx cap init MyApp com.example.myapp --web-dir=www
+          npx cap init "القرآن الكريم" com.maker.quran --web-dir=www
           npx cap add android
           npx cap sync android
+
+      - name: Generate Icons
+        run: |
+          npm install @capacitor/assets
+          npx capacitor-assets generate --android \
+            --iconBackgroundColor '#0f0c29' \
+            --iconBackgroundColorDark '#0f0c29'
 
       - name: Build APK
         run: |
